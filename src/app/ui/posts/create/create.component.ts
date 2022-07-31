@@ -1,26 +1,33 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder } from '@angular/forms';
+import { FormArray, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-create',
   templateUrl: './create.component.html',
   styleUrls: ['./create.component.css'],
 })
-export class CreateComponent implements OnInit {
-  form = this.fb.group({
-    title: this.fb.control(''),
-    description: this.fb.control('description'),
-    body: this.fb.control('body'),
-    tags: this.fb.array([
-      this.fb.control('HTML'),
-      this.fb.control('CSS'),
-      this.fb.control('JavaScript'),
-    ]),
-  });
+export class CreateComponent {
+  form = this.fb.group(
+    {
+      title: this.fb.control('', {
+        validators: [Validators.required],
+      }),
+      description: this.fb.control('description'),
+      body: this.fb.control('body', {
+        validators: [Validators.required, Validators.minLength(10)],
+      }),
+      tags: this.fb.array([
+        this.fb.control('HTML'),
+        this.fb.control('CSS'),
+        this.fb.control('JavaScript'),
+      ]),
+    },
+    {
+      updateOn: 'submit',
+    }
+  );
 
   constructor(private fb: FormBuilder) {}
-
-  ngOnInit(): void {}
 
   /**增加 tag */
   addTag(tag: string) {
@@ -33,5 +40,11 @@ export class CreateComponent implements OnInit {
   /**移除 tag */
   remoteTag(index: number) {
     this.form.controls.tags.removeAt(index);
+  }
+
+  /** 新增表單 */
+  createForm(): void {
+    console.log(this.form.valid);
+    console.log(this.form.controls.title.errors);
   }
 }

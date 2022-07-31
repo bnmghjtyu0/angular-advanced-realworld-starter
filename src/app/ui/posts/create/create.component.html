@@ -2,7 +2,7 @@
   <div class="container page">
     <div class="row">
       <div class="col-md-10 col-md-offset-1 col-xs-12">
-        <form [formGroup]="form">
+        <form #formRef="ngForm" [formGroup]="form" (ngSubmit)="createForm()">
           <fieldset class="form-group">
             <input
               class="form-control form-control-lg"
@@ -10,6 +10,9 @@
               placeholder="Post Title"
               formControlName="title"
             />
+            <div *ngIf="form.invalid && formRef.submitted">
+              <p *ngIf="form.controls.title.errors?.['required']">請填寫內文</p>
+            </div>
           </fieldset>
           <fieldset class="form-group">
             <textarea
@@ -27,6 +30,12 @@
               [formControl]="form.controls.body"
             ></textarea>
           </fieldset>
+          <div *ngIf="form.invalid && formRef.submitted">
+            <p *ngIf="form.controls.body.errors?.['required']">請填寫內文</p>
+            <p *ngIf="form.controls.body.errors?.['minlength']">
+              長度需大於 10
+            </p>
+          </div>
           <fieldset class="form-group">
             <input
               class="form-control"
