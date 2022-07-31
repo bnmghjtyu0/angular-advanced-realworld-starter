@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, shareReplay } from 'rxjs';
 import { Article } from 'src/app/interfaces/article';
 import { SingleArticle } from 'src/app/interfaces/single-article';
 import { PostService } from 'src/app/post.service';
@@ -19,7 +19,7 @@ export class PostComponent implements OnInit {
   ngOnInit(): void {
     this.route.paramMap.subscribe(({ params }: Params) => {
       const { id } = params;
-      this.article$ = this.postService.getArticle(id);
+      this.article$ = this.postService.getArticle(id).pipe(shareReplay(1));
     });
   }
 }
