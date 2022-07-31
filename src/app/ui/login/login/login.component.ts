@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -8,7 +8,7 @@ import {
   NgModel,
   Validators,
 } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { LoginService } from 'src/app/login.service';
 
 /**登入頁 */
@@ -17,7 +17,7 @@ import { LoginService } from 'src/app/login.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   user = {
     email: 'demo@miniasp.com',
     password: '123456',
@@ -35,9 +35,14 @@ export class LoginComponent {
   /**建構子 */
   constructor(
     private router: Router,
+    private route: ActivatedRoute,
     private loginService: LoginService,
     private fb: FormBuilder
   ) {}
+
+  ngOnInit(): void {
+    this.form.setValue(this.user);
+  }
 
   /**登入 */
   login(): void {
@@ -45,7 +50,10 @@ export class LoginComponent {
       this.loginService.login(this.user).subscribe({
         next: (result) => {
           localStorage.setItem('token', result.user.token);
-          this.router.navigate(['/']);
+          this.route.queryParamMap.subscribe((params) => {
+            const url = params.get('redirect') || '';
+            this.router.navigate([url]);
+          });
         },
         error: (error: HttpErrorResponse) => {
           alert(error.error.body);
