@@ -1,6 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, Validators } from '@angular/forms';
 
+//共用 validators
+const lenValidator = Validators.compose([
+  Validators.required,
+  Validators.minLength(10),
+]);
+
 @Component({
   selector: 'app-create',
   templateUrl: './create.component.html',
@@ -14,7 +20,7 @@ export class CreateComponent {
       }),
       description: this.fb.control('description'),
       body: this.fb.control('body', {
-        validators: [Validators.required, Validators.minLength(10)],
+        validators: lenValidator,
       }),
       tags: this.fb.array([
         this.fb.control('HTML'),
