@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, Validators } from '@angular/forms';
+import { PostService } from 'src/app/post.service';
 
 //共用 validators
 const lenValidator = Validators.compose([
@@ -33,7 +34,7 @@ export class CreateComponent {
     }
   );
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder, private postService: PostService) {}
 
   /**增加 tag */
   addTag(tag: string) {
@@ -52,5 +53,7 @@ export class CreateComponent {
   createForm(): void {
     console.log(this.form.valid);
     console.log(this.form.controls.title.errors);
+
+    // this.postService.createArticle()
   }
 }
