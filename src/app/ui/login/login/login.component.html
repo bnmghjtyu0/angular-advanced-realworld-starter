@@ -4,15 +4,20 @@
       <div class="col-md-6 col-md-offset-3 col-xs-12">
         <h1 class="text-xs-center">Sign in</h1>
 
-        <form (ngSubmit)="login()">
+        <form #formRef="ngForm" [formGroup]="form" (ngSubmit)="login()">
           <fieldset class="form-group">
             <input
               name="email"
               class="form-control form-control-lg"
               type="text"
               placeholder="Email"
-              [(ngModel)]="user.email"
+              formControlName="email"
+              [class.is-valid]="isValid(form.controls['email'], formRef)"
+              [class.is-invalid]="isInvalid(form.controls['email'], formRef)"
             />
+            <p *ngIf="isInvalid(form.controls['email'], formRef)" class="text-danger">
+              帳號格式不正確
+            </p>
           </fieldset>
           <fieldset class="form-group">
             <input
@@ -20,8 +25,11 @@
               class="form-control form-control-lg"
               type="password"
               placeholder="Password"
-              [(ngModel)]="user.password"
+              formControlName="password"
             />
+            <p *ngIf="isInvalid(form.controls['password'], formRef)" class="text-danger">
+              密碼格式不正確
+            </p>
           </fieldset>
           <button type="submit" class="btn btn-lg btn-primary pull-xs-right">
             Sign in
