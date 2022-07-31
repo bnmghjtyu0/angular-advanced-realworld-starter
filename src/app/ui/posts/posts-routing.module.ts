@@ -10,7 +10,7 @@ const routes: Routes = [
   /**檢視頁 */
   { path: 'posts', component: PostsComponent },
   /**單篇內容 */
-  { path: 'posts/:id', component: PostComponent },
+  { path: 'post/:id', component: PostComponent },
   /**建立文章 */
   { path: 'create', component: CreateComponent },
 ];
