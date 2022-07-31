@@ -20,10 +20,7 @@
           </ul>
         </div>
 
-        <div
-          class="post-preview"
-          *ngFor="let article of (articles$ | async)?.articles"
-        >
+        <div class="post-preview" *ngFor="let article of articles">
           <div class="post-meta">
             <a href="profile.html">
               <img src="http://i.imgur.com/Qr71crq.jpg" />
@@ -36,7 +33,7 @@
               <i class="ion-heart"></i> 29
             </button>
           </div>
-          <a routerLink="/post/{{ article.id }}" class="preview-link">
+          <a [routerLink]="['/post', article.id]" class="preview-link">
             <h1>{{ article.title }}</h1>
             <p>
               {{ article.description }}
