@@ -15,6 +15,19 @@ import { Article } from 'src/app/interfaces/article';
 export class PostsComponent {
   displayArticles = false;
   refresh$ = new BehaviorSubject(null);
+
+  multipleRequest$ = this.refresh$.pipe(
+    switchMap((data) =>
+      this.postService.getArticles().pipe(
+        map((result) => ({
+          api1: data,
+          api2: result,
+        }))
+      )
+    ),
+    shareReplay(1)
+  );
+
   /**畫面有用到，才會取得 API */
   articles$: Observable<Article[]> = this.refresh$.pipe(
     switchMap(() => this.postService.getArticles()),
@@ -22,7 +35,6 @@ export class PostsComponent {
     //cache the result
     shareReplay(1)
   );
-
 
   constructor(private postService: PostService) {}
 
