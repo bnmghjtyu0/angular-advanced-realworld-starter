@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
-  { path: '', pathMatch: 'full', redirectTo: 'posts' },
   {
     path: 'login',
     loadChildren: () =>
@@ -12,12 +11,12 @@ const routes: Routes = [
 
   {
     path: '',
-    component:LayoutComponent,
+    component: LayoutComponent,
     children: [
       {
-        path: 'posts',
+        path: '',
         loadChildren: () =>
-          import('./ui/posts/post.module').then((m) => m.PostModule),
+          import('./ui/posts/posts.module').then((m) => m.PostsModule),
       },
     ],
   },

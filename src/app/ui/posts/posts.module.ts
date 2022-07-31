@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PostsComponent } from './posts/posts.component';
 import { CreateComponent } from './create/create.component';
 import { PostComponent } from './post/post.component';
-import { PostsRoutingModule } from './post-routing.module';
+import { PostsRoutingModule } from './posts-routing.module';
+import { PostsComponent } from './posts.component';
 
 @NgModule({
   declarations: [
@@ -15,4 +15,4 @@ import { PostsRoutingModule } from './post-routing.module';
   exports: [],
   providers: [],
 })
-export class PostModule {}
+export class PostsModule {}
