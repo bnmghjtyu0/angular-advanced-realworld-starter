@@ -1,7 +1,6 @@
 import { LayoutComponent } from './layout/layout/layout.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AuthGuard } from './guards/auth.guard';
 
 const routes: Routes = [
   {
@@ -20,7 +19,6 @@ const routes: Routes = [
           import('./ui/posts/posts.module').then((m) => m.PostsModule),
       },
     ],
-    canActivate: [AuthGuard],
   },
 ];
 

@@ -32,6 +32,8 @@ export class LoginComponent implements OnInit {
     }),
   });
 
+  redirect = '';
+
   /**建構子 */
   constructor(
     private router: Router,
@@ -42,6 +44,9 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.form.setValue(this.user);
+    this.route.queryParamMap.subscribe((params) => {
+      this.redirect = params.get('redirect') || '';
+    });
   }
 
   /**登入 */
@@ -50,10 +55,7 @@ export class LoginComponent implements OnInit {
       this.loginService.login(this.user).subscribe({
         next: (result) => {
           localStorage.setItem('token', result.user.token);
-          this.route.queryParamMap.subscribe((params) => {
-            const url = params.get('redirect') || '';
-            this.router.navigate([url]);
-          });
+          this.router.navigate([this.redirect]);
         },
         error: (error: HttpErrorResponse) => {
           alert(error.error.body);

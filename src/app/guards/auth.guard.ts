@@ -23,7 +23,7 @@ export class AuthGuard implements CanActivate {
     | boolean
     | UrlTree {
     if (!localStorage.getItem('token')) {
-      return this.router.parseUrl('/login?redirect=create');
+      return this.router.parseUrl(`/login?redirect=${state.url}`);
     } else {
       return true;
     }
