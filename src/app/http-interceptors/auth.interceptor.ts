@@ -8,25 +8,28 @@ import {
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
+
+/** Auth 擷取器 */
 @Injectable()
-export class ApiInterceptor implements HttpInterceptor {
+export class AuthInterceptor implements HttpInterceptor {
   intercept(
     request: HttpRequest<unknown>,
     next: HttpHandler
   ): Observable<HttpEvent<unknown>> {
-    request = request.clone({
+    const newRequest = request.clone({
       setHeaders: {
-        Authorization: 'Bearer ' + localStorage.getItem('token'),
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
       },
     });
-    return next.handle(request);
+    return next.handle(newRequest);
   }
 }
 
-export const ApiInterceptorProvider = [
+/** Auth 擷取器提供器 */
+export const AuthInterceptorProvider = [
   {
     provide: HTTP_INTERCEPTORS,
-    useClass: ApiInterceptor,
-    multi: true,
+    useClass: AuthInterceptor,
+    multi: true, //可以多個
   },
 ];

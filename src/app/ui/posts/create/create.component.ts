@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { PostService } from 'src/app/post.service';
 
 //共用 validators
@@ -34,7 +35,11 @@ export class CreateComponent {
     }
   );
 
-  constructor(private fb: FormBuilder, private postService: PostService) {}
+  constructor(
+    private fb: FormBuilder,
+    private postService: PostService,
+    private router: Router
+  ) {}
 
   /**增加 tag */
   addTag(tag: string) {
@@ -51,9 +56,17 @@ export class CreateComponent {
 
   /** 新增表單 */
   createForm(): void {
-    console.log(this.form.valid);
-    console.log(this.form.controls.title.errors);
+    const reqBody = {
+      title: this.form.value.title || '',
+      body: this.form.value.body || '',
+      description: this.form.value.description || '',
+      tagList: (this.form.value.tags || []) as string[],
+    };
 
-    // this.postService.createArticle()
+    this.postService.createArticle(reqBody).subscribe({
+      next: () => {
+        this.router.navigate(['/']);
+      },
+    });
   }
 }
