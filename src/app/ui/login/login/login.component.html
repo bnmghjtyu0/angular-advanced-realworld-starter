@@ -26,6 +26,8 @@
               type="password"
               placeholder="Password"
               formControlName="password"
+              [class.is-valid]="isValid(form.controls['password'], formRef)"
+              [class.is-invalid]="isInvalid(form.controls['password'], formRef)"
             />
             <p *ngIf="isInvalid(form.controls['password'], formRef)" class="text-danger">
               密碼格式不正確

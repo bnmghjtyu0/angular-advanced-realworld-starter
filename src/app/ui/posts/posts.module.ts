@@ -1,3 +1,4 @@
+import { ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CreateComponent } from './create/create.component';
@@ -11,7 +12,7 @@ import { PostsComponent } from './posts.component';
     CreateComponent,
     PostComponent
   ],
-  imports: [ CommonModule,PostsRoutingModule ],
+  imports: [ CommonModule,PostsRoutingModule ,ReactiveFormsModule],
   exports: [],
   providers: [],
 })
