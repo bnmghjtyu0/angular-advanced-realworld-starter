@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { PostService } from 'src/app/post.service';
 
 //共用 validators
-const lenValidator = Validators.compose([
+const bodyValidator = Validators.compose([
   Validators.required,
   Validators.minLength(10),
 ]);
@@ -14,16 +14,14 @@ const lenValidator = Validators.compose([
   templateUrl: './create.component.html',
   styleUrls: ['./create.component.css'],
 })
-export class CreateComponent {
+export class CreateComponent implements OnInit {
   form = this.fb.group(
     {
       title: this.fb.control('', {
         validators: [Validators.required],
       }),
       description: this.fb.control('description'),
-      body: this.fb.control('body', {
-        validators: lenValidator,
-      }),
+      body: this.fb.control('body'),
       tags: this.fb.array([
         this.fb.control('HTML'),
         this.fb.control('CSS'),
@@ -41,6 +39,18 @@ export class CreateComponent {
     private router: Router
   ) {}
 
+  ngOnInit() {
+    this.form.controls.title.statusChanges.subscribe((status) => {
+      if (status === 'VALID') {
+        this.form.controls.body.addValidators(bodyValidator ?? []);
+        this.form.controls.body.updateValueAndValidity();
+      } else if (status === 'INVALID') {
+        this.form.controls.body.removeValidators(bodyValidator ?? []);
+        this.form.controls.body.updateValueAndValidity();
+      }
+    });
+  }
+
   /**增加 tag */
   addTag(tag: string) {
     // Angular 14
@@ -56,17 +66,19 @@ export class CreateComponent {
 
   /** 新增表單 */
   createForm(): void {
-    const reqBody = {
-      title: this.form.value.title || '',
-      body: this.form.value.body || '',
-      description: this.form.value.description || '',
-      tagList: (this.form.value.tags || []) as string[],
-    };
+    if (this.form.valid) {
+      const reqBody = {
+        title: this.form.value.title || '',
+        body: this.form.value.body || '',
+        description: this.form.value.description || '',
+        tagList: (this.form.value.tags || []) as string[],
+      };
 
-    this.postService.createArticle(reqBody).subscribe({
-      next: () => {
-        this.router.navigate(['/']);
-      },
-    });
+      this.postService.createArticle(reqBody).subscribe({
+        next: () => {
+          this.router.navigate(['/']);
+        },
+      });
+    }
   }
 }
