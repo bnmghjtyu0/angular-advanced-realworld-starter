@@ -1,4 +1,5 @@
-<div class="home-page">
+<button (click)="displayArticles = !displayArticles">toggle articles</button>
+<div class="home-page" *ngIf="displayArticles">
   <div class="banner">
     <div class="container">
       <h1 class="logo-font">conduit</h1>
@@ -20,7 +21,8 @@
           </ul>
         </div>
 
-        <div class="post-preview" *ngFor="let article of articles">
+        <!-- articles$ | async:  DOM 物件產生後，才會訂閱 articles$ 並且呼叫 API -->
+        <div class="post-preview" *ngFor="let article of articles$ | async">
           <div class="post-meta">
             <a href="profile.html">
               <img src="http://i.imgur.com/Qr71crq.jpg" />

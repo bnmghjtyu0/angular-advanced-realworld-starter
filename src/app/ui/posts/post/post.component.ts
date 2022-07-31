@@ -1,33 +1,26 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
-import { Observable, shareReplay } from 'rxjs';
+import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { Observable } from 'rxjs';
+import { switchMap, map } from 'rxjs/operators';
 import { Article } from 'src/app/interfaces/article';
-import { SingleArticle } from 'src/app/interfaces/single-article';
 import { PostService } from 'src/app/post.service';
 
 @Component({
   templateUrl: './post.component.html',
   styleUrls: ['./post.component.css'],
 })
-export class PostComponent implements OnInit {
-  /**article?: 預設可以 undefined */
-  article?: Article;
+export class PostComponent {
+  article$: Observable<Article> = this.route.paramMap.pipe(
+    map((params) => params.get('id') || ''),
+    switchMap((id) => {
+      console.log(id)
+      return this.postService.getArticle(id)
+    }),
+    map((result) => result.article)
+  );
 
   constructor(
     private route: ActivatedRoute,
     private postService: PostService
   ) {}
-
-  ngOnInit(): void {
-    // 取得必要參數
-    this.route.paramMap.subscribe((params) => {
-      const id = params.get('id') || '';
-
-      this.postService.getArticle(id).subscribe({
-        next: (result) => {
-          this.article = result.article;
-        },
-      });
-    });
-  }
 }

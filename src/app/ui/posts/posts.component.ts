@@ -1,7 +1,7 @@
-import { Observable } from 'rxjs';
-import { Component, OnInit } from '@angular/core';
+import { map, Observable } from 'rxjs';
+import { shareReplay } from 'rxjs/operators';
+import { Component } from '@angular/core';
 import { PostService } from 'src/app/post.service';
-import { Articles } from 'src/app/interfaces/articles';
 import { Article } from 'src/app/interfaces/article';
 
 /**
@@ -12,16 +12,14 @@ import { Article } from 'src/app/interfaces/article';
   templateUrl: './posts.component.html',
   styleUrls: ['./posts.component.css'],
 })
-export class PostsComponent implements OnInit {
-  articles: Article[] = [];
+export class PostsComponent {
+  displayArticles = false;
+  /**畫面有用到，才會取得 API */
+  articles$: Observable<Article[]> = this.postService.getArticles().pipe(
+    map((result) => result.articles),
+    //cache the result
+    shareReplay(1)
+  );
 
   constructor(private postService: PostService) {}
-
-  ngOnInit(): void {
-    this.postService.getArticles().subscribe({
-      next: (result) => {
-        this.articles = result.articles;
-      },
-    });
-  }
 }
