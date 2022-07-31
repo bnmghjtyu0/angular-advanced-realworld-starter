@@ -41,7 +41,6 @@ export class LoginComponent {
 
   /**登入 */
   login(): void {
-    console.log(this.form);
     if (this.form.valid) {
       this.loginService.login(this.user).subscribe({
         next: (result) => {
